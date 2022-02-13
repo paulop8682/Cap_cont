@@ -1,17 +1,24 @@
 library(readxl)
 library(tidyverse)
+KOFGI_2020 <- read_excel("Faculdade/KOFGI_2020.xlsx")
 
-tabelaec <- read_excel("Faculdade/tabelaec.xls", skip = 3)
+kof <- KOFGI_2020[,1:4]
 
-tabelaec <- tabelaec[2:15] %>%  mutate_all(as.integer)
+t <- filter(kof, country == am)
+am <- c("Latin America and Caribbean" ,
+        "Brazil", 
+        "World", 
+        "North America",
+        "Middle East and North Africa")
 
-datas_mes    <- seq(from=as.Date("2010-01-01"), to=as.Date("2021-12-11"), by="month")
-tabelaec["data"] <- seq(from=as.Date("2010-01-01"), to=as.Date("2021-12-11"), by="month")
-tabelaec <- select(tabelaec, data, 2:15)
-glimpse(tabelaec)          
+#NAC North America
+#MEA Middle East and North Africa
+#LCN Latin America and Caribbean
 
-names(tabelaec)[6:13] <- c("comercio", "industria", "servicos", 
-                           "outros", "MEI", "EI", "SL", "demais")
+ggplot(t, aes(year, KOFGI, color = code)) + 
+  geom_line(size = 1.2) +
+  theme_light()
+ 
 
 
-tabelaec <- na.omit(tabelaec)
+
